@@ -3,16 +3,13 @@ MosaicPatcher v1.1  使用说明
 
 作用
 ----
-把 Alice in Cradle 的 Assembly-CSharp.dll 里
-    nel.MosaicShower::FnDrawMosaic
-方法末尾的  return true;  改成  return false;
-即：让游戏不绘制马赛克。
+一键关闭 Alice in Cradle 的马赛克显示。
 
-    原来（return true）  ->  有马赛克
-    改后（return false） ->  无马赛克
+    原来  ->  有马赛克
+    改后  ->  无马赛克
 
-原理等价于 dnSpy 手动改 IL：只翻 1 个字节 0x17 -> 0x16，文件长度不变，其余字节一个不动。
-程序自己解析 PE / .NET 元数据定位方法，不依赖 dnSpy / dnlib。
+程序会自动找到游戏的 Assembly-CSharp.dll，只做一处极小的改动：
+文件长度完全不变、其余内容一个字节都不动，首次处理时自动备份，随时可一键还原。
 
 
 运行（三种方式，任选一种）
@@ -145,8 +142,7 @@ MD5 校验是怎么用的
   不需要目标文件可写），失败会自动回滚，不会损坏原文件。
 * 不要删除 .mosaicpatch.bak，还原就靠它。
 * 程序只会改那 1 个字节，其余内容一个字节都不动；改完文件大小与原来相同。
-* 如果换了游戏版本/DLL，只要 nel.MosaicShower::FnDrawMosaic 还在，程序就能自己重新定位；
-  定位不到会明确报错并且不做任何修改。
+* 如果换了游戏版本/DLL，程序会重新自动定位；定位失败会明确报错并且不做任何修改。
 
 
 关于打包 / 重新打包
