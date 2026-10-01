@@ -1,5 +1,7 @@
 # MosaicPatcher
 
+[![build](https://github.com/voidzi/AliceInCradle_MosaicPatcher/actions/workflows/build.yml/badge.svg)](https://github.com/voidzi/AliceInCradle_MosaicPatcher/actions/workflows/build.yml)
+
 > 一键关闭《Alice in Cradle》的马赛克显示（去马赛克）。
 > One-click patcher that disables the mosaic filter in *Alice in Cradle*.
 
@@ -40,7 +42,7 @@ return false;   // 不画马赛克
 
 ## 下载 / 使用
 
-1. 到 [Releases](../../releases) 下载 `MosaicPatcher.exe`
+1. 到 [Releases](https://github.com/voidzi/AliceInCradle_MosaicPatcher/releases/latest) 下载 `MosaicPatcher.exe`
 2. 放到**游戏根目录**（与 `AliceInCradle_Data` 同级）——放别处也行，它会自动搜索
 3. 双击运行 → 自动选中游戏的 `Assembly-CSharp.dll` → 点 **「执行去马赛克」**
 4. 想恢复原状，点 **「还原备份」**
@@ -68,6 +70,13 @@ MosaicPatcher.exe <任意命令> --out <文件>        把输出写进文件
 ```
 
 ## 从源码构建
+
+先克隆仓库：
+
+```bash
+git clone https://github.com/voidzi/AliceInCradle_MosaicPatcher.git
+cd AliceInCradle_MosaicPatcher
+```
 
 ### C# 版（推荐，不需要安装任何 SDK）
 
@@ -123,6 +132,10 @@ python MosaicPatcher.pyw
 - 请自行确认你已合法拥有该游戏，并遵守其最终用户许可协议（EULA）。
 - 本工具与游戏开发商 / 发行商**没有任何关联**，也未获其授权或认可。
 - 使用本工具产生的一切后果由使用者自行承担。
+
+## 作者
+
+- [@voidzi](https://github.com/voidzi)
 
 ## License
 
