@@ -30,7 +30,3 @@ mosaic_patcher.json
 Thumbs.db
 desktop.ini
 
-# 只在本机使用的证书脚本（依赖未上传的 .cer）
-安装信任证书.bat
-卸载信任证书.bat
-
