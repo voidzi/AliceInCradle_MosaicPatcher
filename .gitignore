@@ -1,0 +1,36 @@
+# 忽略构建产物与敏感文件
+
+# 构建目录 / PyInstaller 产物
+_build/
+build/
+dist/
+*.spec
+__pycache__/
+*.pyc
+
+# 私钥与证书（私钥绝对不能上传；自签名证书对本机之外也没有意义）
+*.pfx
+*.p12
+*.cer
+
+# 编译产物（发布到 GitHub Releases，而不是提交进仓库）
+MosaicPatcher.exe
+MosaicPatcher_portable/
+
+# 工具运行时在本机生成的文件
+mosaic_patcher.json
+*.mosaicpatch.bak
+*.mosaicpatch.new
+*.mosaicpatch.old
+
+# 编辑器 / 系统
+.vs/
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+
+# 只在本机使用的证书脚本（依赖未上传的 .cer）
+安装信任证书.bat
+卸载信任证书.bat
+

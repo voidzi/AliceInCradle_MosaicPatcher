@@ -1,0 +1,66 @@
+name: build
+
+on:
+  push:
+    branches: [ main, master ]
+    tags: [ 'v*' ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build (C# via .NET Framework csc)
+        shell: pwsh
+        run: |
+          $fw = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319"
+          & "$fw\csc.exe" /nologo /target:winexe /platform:anycpu /optimize+ /codepage:65001 `
+            /win32icon:icon.ico /out:MosaicPatcher.exe `
+            /reference:"$fw\System.dll" /reference:"$fw\System.Core.dll" `
+            /reference:"$fw\System.Drawing.dll" /reference:"$fw\System.Windows.Forms.dll" `
+            MosaicPatcher.cs
+          if (-not (Test-Path MosaicPatcher.exe)) { throw "build failed" }
+          "built: $((Get-Item MosaicPatcher.exe).Length) bytes"
+
+      - name: Smoke test (CLI)
+        shell: pwsh
+        run: |
+          # 用原始 DLL 造一个"标准路径"的假游戏目录，验证定位与打补丁流程
+          $dll = Get-ChildItem -Recurse -Filter "Assembly-CSharp.dll.bak_original" -ErrorAction SilentlyContinue |
+                 Select-Object -First 1
+          if ($dll) {
+            $dir = "smoke\AliceInCradle_Data\Managed"
+            New-Item -ItemType Directory -Force -Path $dir | Out-Null
+            Copy-Item $dll.FullName "$dir\Assembly-CSharp.dll"
+            .\MosaicPatcher.exe --status "$dir\Assembly-CSharp.dll" --out status.txt
+            Get-Content status.txt
+            .\MosaicPatcher.exe --patch "$dir\Assembly-CSharp.dll" --out patch.txt
+            Get-Content patch.txt
+          } else {
+            "no sample dll in repo (expected) - skip"
+          }
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MosaicPatcher
+          path: |
+            MosaicPatcher.exe
+            MosaicPatcher.pyw
+            运行.bat
+            README.md
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            MosaicPatcher.exe
+            MosaicPatcher.pyw
